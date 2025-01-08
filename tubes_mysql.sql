@@ -13,7 +13,7 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- -----------------------------------------------------
 -- Schema mydb
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET UTF8;
+CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;
 SHOW WARNINGS;
 
 USE `mydb` ;
@@ -22,21 +22,19 @@ SHOW WARNINGS;
 -- -----------------------------------------------------
 -- Table `mydb`.`Stock Update`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Stock Update` (
-  `stock-UpdateID` INT NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `mydb`.`stock_update` (
+  `stock_updateID` INT NOT NULL AUTO_INCREMENT,
   `bookID` INT NOT NULL,
   `stockDate` DATETIME NULL,
   `quantityStock` INT NULL,
   `reasonStock` TEXT NULL,
-  PRIMARY KEY (`stock-UpdateID`),
-  INDEX `fk_Stock Update_1_idx` (`bookID` ASC) VISIBLE,
-  CONSTRAINT `fk_Stock Update_1`
+  PRIMARY KEY (`stock_updateID`),
+  INDEX `fk_stock_update_1_idx` (`bookID` ASC) VISIBLE,
+  CONSTRAINT `fk_stock_update_1`
     FOREIGN KEY (`bookID`)
     REFERENCES `mydb`.`Books` (`bookID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
 SHOW WARNINGS;
 
 -- -----------------------------------------------------
@@ -47,21 +45,20 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Employe` (
   `name-employee` INT NULL,
   `contact-employee` VARCHAR(45) NULL UNIQUE,
   `bookID` INT NULL,
-  `email-employee` VARCHAR(45) NULL UNIQUE,
+  `email-employee` VARCHAR(45) NULL,
   `role_employee` ENUM('admin', 'logistik', 'administrasi') NULL,
-  `stock-UpdateID` INT NULL,
+  `stock_updateID` INT NULL,
   PRIMARY KEY (`employeID`),
   INDEX `fk_Employe_1_idx` (`bookID` ASC) VISIBLE,
-  UNIQUE INDEX `email-employee_UNIQUE` (`email-employee` ASC) VISIBLE,
-  INDEX `fk_Employe_2_idx` (`stock-UpdateID` ASC) VISIBLE,
+  INDEX `fk_Employe_2_idx` (`stock_updateID` ASC) VISIBLE,
   CONSTRAINT `fk_Employe_1`
     FOREIGN KEY (`bookID`)
     REFERENCES `mydb`.`Books` (`bookID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Employe_2`
-    FOREIGN KEY (`stock-UpdateID`)
-    REFERENCES `mydb`.`Stock Update` (`stock-UpdateID`)
+    FOREIGN KEY (`stock_updateID`)
+    REFERENCES `mydb`.`stock_update` (`stock_updateID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -122,7 +119,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Books` (
   `bookID` INT NOT NULL AUTO_INCREMENT,
   `title-book` VARCHAR(45) NULL,
   `authors-book` VARCHAR(45) NULL,
-  `genre-book` ENUM('horor', 'fantasy', 'history', 'technology', 'biology', 'animal', '...') NULL,
+  `genre-book` ENUM('horor', 'fantasy', 'history', 'technology', 'biology', 'animal', '...') NOT NULL,
   `stock-book` INT NULL,
   `price` DECIMAL NULL,
   `isbn` VARCHAR(45) NULL,
@@ -151,7 +148,6 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `mydb`.`Rekomendasi` (
   `rekomendasiID` INT NOT NULL AUTO_INCREMENT,
   `bookID` INT NULL,
-  `genre-book` VARCHAR(45) NULL,
   `title-book` VARCHAR(45) NULL,
   `authors-book` VARCHAR(45) NULL,
   PRIMARY KEY (`rekomendasiID`),
@@ -170,7 +166,7 @@ CREATE TABLE IF NOT EXISTS `Customer` (
   `customerID` INT NOT NULL AUTO_INCREMENT,
   `username-customer` INT NOT NULL, -- Adjusted to match foreign key requirement
   `contact-customer` VARCHAR(45) NULL,
-  `email-customer` VARCHAR(45) NULL,
+  `email-customer` VARCHAR(45) NULL UNIQUE,
   `address-costumer` INT NULL,
   `rekomendasiID` INT NULL,
   PRIMARY KEY (`customerID`),
@@ -242,7 +238,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Name-Employee` (
   `first-name-employee` VARCHAR(45) NULL,
   `last-name-customer` VARCHAR(45) NULL,
   `username-employee` VARCHAR(45) NULL,
-  `employeID` INT NULL,
+  `employeID` INT NOT NULL,
   PRIMARY KEY (`name-employeeID`),
   INDEX `fk_Name-Employee_Employe1_idx` (`employeID` ASC) VISIBLE,
   CONSTRAINT `fk_Name-Employee_Employe1`
@@ -271,33 +267,124 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Shipment-Address` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
+
+CREATE TABLE IF NOT EXISTS `mydb`.`sales_trend_last_week` (
+    `Tanggal` DATE NOT NULL,
+    `Total Transaksi` INT NOT NULL,
+    `Total Penjualan` DECIMAL(10,2) NOT NULL,
+    `Rata-rata Penjualan` DECIMAL(10,2) NOT NULL,
+    `Pertumbuhan (%)` DECIMAL(10,2) NULL,
+    PRIMARY KEY (`Tanggal`)
+);
+
+-- query 6 sales_trend_last_Year
+CREATE TABLE IF NOT EXISTS `mydb`.`sales_trend_last_year` (
+    `Bulan` DATE NOT NULL,
+    `Total Transaksi` INT NOT NULL,
+    `Total Penjualan` DECIMAL(10,2) NOT NULL,
+    `Rata-rata Penjualan` DECIMAL(10,2) NOT NULL,
+    `Pertumbuhan (%)` DECIMAL(10,2) NULL,
+    PRIMARY KEY (`Bulan`)
+);
+
+-- Create table for customer book purchases
+CREATE TABLE IF NOT EXISTS `mydb`.`customer_book_purchases` (
+    `purchase_id` INT AUTO_INCREMENT PRIMARY KEY,
+    `customerID` INT,
+    `customer_name` VARCHAR(100),
+    `bookID` INT,
+    `book_title` VARCHAR(100),
+    `genre` VARCHAR(45),
+    `price` DECIMAL(10,2),
+    `order_date` DATETIME,
+    `payment_method` VARCHAR(45)
+);
+
+-- Insert sample data for customer book purchases
+INSERT INTO `mydb`.`customer_book_purchases` 
+(`customerID`, `customer_name`, `bookID`, `book_title`, `genre`, `price`, `order_date`, `payment_method`)
+VALUES 
+(1, 'John C', 1, 'The Magic Portal', 'fantasy', 29.99, '2023-01-01 10:00:00', 'cash'),
+(2, 'John Smith', 5, 'Biology Basics', 'biology', 45.99, '2023-01-02 11:30:00', 'transfer bank'),
+(3, 'Sarah Davis', 2, 'Dark Shadows', 'horor', 19.99, '2023-01-03 14:15:00', 'e-wallet'),
+(4, 'Emily Stomer', 10, 'Tech Revolution', 'technology', 59.99, '2023-01-04 16:45:00', 'virtual bank'),
+(5, 'Taylor Custom', 3, 'Ancient Times', 'history', 34.99, '2023-01-05 09:20:00', 'cash'),
+(6, 'Fist Cuomer', 15, 'World War Chronicles', 'history', 39.99, '2023-01-06 13:10:00', 'e-wallet'),
+(7, 'William Ctomer', 7, 'Dragon Quest', 'fantasy', 24.99, '2023-01-07 15:30:00', 'transfer bank'),
+(8, 'Wlan Tomer', 20, 'Haunted House', 'horor', 29.99, '2023-01-08 10:45:00', 'cash'),
+(9, 'Fir Tom', 12, 'Wildlife Adventures', 'animal', 49.99, '2023-01-09 11:20:00', 'virtual bank'),
+(10, 'Olive Oil', 8, 'Ghost Stories', 'horor', 22.99, '2023-01-10 14:40:00', 'e-wallet'),
+(11, 'Wiliam Taylor', 16, 'AI Future', 'technology', 69.99, '2023-01-11 16:15:00', 'transfer bank'),
+(12, 'Liam Black', 4, 'Digital Age', 'technology', 54.99, '2023-01-12 09:30:00', 'cash'),
+(13, 'Tom Custom', 19, 'Mystic Realms', 'fantasy', 31.99, '2023-01-13 13:45:00', 'virtual bank'),
+(14, 'Bean Hill', 11, 'Cell Structure', 'biology', 44.99, '2023-01-14 15:20:00', 'e-wallet'),
+(15, 'Thomas Ctomer', 6, 'Pet Care Guide', 'animal', 27.99, '2023-01-15 10:10:00', 'transfer bank'),
+(16, 'Lewis Stomer', 14, 'Nightmare Alley', 'horor', 25.99, '2023-01-16 11:40:00', 'cash'),
+(17, 'Aca Custom', 17, 'Marine Life', 'biology', 37.99, '2023-01-17 14:25:00', 'virtual bank'),
+(18, 'Ava Cuomer', 9, 'Medieval Times', 'history', 42.99, '2023-01-18 16:50:00', 'e-wallet'),
+(19, 'Scot Ctomer', 13, 'Enchanted Forest', 'fantasy', 28.99, '2023-01-19 09:15:00', 'transfer bank'),
+(20, 'Ethan stomer', 18, 'Zoo Adventures', 'animal', 33.99, '2023-01-20 13:30:00', 'cash'),
+(21, 'Mia Custom', 21, 'Renaissance Art', 'history', 46.99, '2023-01-21 15:45:00', 'virtual bank'),
+(22, 'Allen Cuomerso', 22, 'Quantum Computing', 'technology', 64.99, '2023-01-22 10:20:00', 'e-wallet'),
+(23, 'Clark Ctomer', 23, 'Genetics 101', 'biology', 39.99, '2023-01-23 11:50:00', 'transfer bank'),
+(24, 'Young Stomer', 24, 'Safari Guide', 'animal', 29.99, '2023-01-24 14:15:00', 'cash'),
+(25, 'Allan Wake', 25, 'Magic Kingdom', 'fantasy', 34.99, '2023-01-25 16:40:00', 'virtual bank');
+
+-- Query to show customer purchase history with details
+SELECT 
+    cp.customerID,
+    cp.customer_name,
+    COUNT(DISTINCT cp.bookID) as total_books_bought,
+    GROUP_CONCAT(DISTINCT cp.genre) as genres_bought,
+    SUM(cp.price) as total_spent,
+    GROUP_CONCAT(DISTINCT cp.payment_method) as payment_methods_used
+FROM 
+    `mydb`.`customer_book_purchases` cp
+GROUP BY 
+    cp.customerID, cp.customer_name
+ORDER BY 
+    total_spent DESC;
+
+-- Query to show popular books and genres
+SELECT 
+    cp.genre,
+    COUNT(*) as total_purchases,
+    ROUND(AVG(cp.price), 2) as average_price,
+    GROUP_CONCAT(DISTINCT cp.book_title) as books_in_genre
+FROM 
+    `mydb`.`customer_book_purchases` cp
+GROUP BY 
+    cp.genre
+ORDER BY 
+    total_purchases DESC;
+
 INSERT INTO `Customer` (`username-customer`, `contact-customer`, `email-customer`, `address-costumer`, `rekomendasiID`)
 VALUES 
-(101, '33243456', 'cusmer1@example.com', NULL, NULL),
-(102, '23456890', 'ustr1@example.com', NULL, NULL),
-(103, '12347890', '2123stom1@example.com', NULL, NULL),
-(104, '14567890', 'tm3211@example.com', NULL, NULL),
-(105, '34214567', 'mer121@example.com', NULL, NULL),
-(106, '43456890', '32strsfa1@example.com', NULL, NULL),
-(107, '22347890', '1ctom1wqw@example.com', NULL, NULL),
-(108, '44567890', '21ctm1sa@example.com', NULL, NULL),
-(109, '38874567', 'eqwctomerdwag1@example.com', NULL, NULL),
-(110, '23450090', 'vrscstr1dwa@example.com', NULL, NULL),
-(111, '32145890', 'e3q2o231m1@example.com', NULL, NULL),
-(112, '31267890', '31um144@example.com', NULL, NULL),
-(113, '34123567', 'gtrustomer31241@example.com', NULL, NULL),
-(114, '24532890', 'htjustr1fesxf@example.com', NULL, NULL),
-(115, '13234790', 'njmutomrewg1@example.com', NULL, NULL),
-(116, '14568990', 'klhcutm1grwer@example.com', NULL, NULL),
-(117, '78734567', 'loicstomerqqe1@example.com', NULL, NULL),
-(118, '79456890', 'ipustr1ee3q@example.com', NULL, NULL),
-(119, '96347890', 'uyrstom879781@example.com', NULL, NULL),
-(120, '87567890', 'tuiftcutm1htf@example.com', NULL, NULL),
-(121, '30004567', 'fewecomefesdr1@example.com', NULL, NULL),
-(122, '83456890', 'e3qwcustrads1@example.com', NULL, NULL),
-(123, '72347890', 'ewqfctodasm1@example.com', NULL, NULL),
-(124, '89567890', 'rtwcutfersm1@edawdxample.com', NULL, NULL),
-(125, '34567000', 'fewjwcuomdwweer1@example.com', NULL, NULL);
+(101, '33243456', 'cusmer1@example.com', 1, 2),
+(102, '23456890', 'ustr1@example.com', 2, 3),
+(103, '12347890', '2123stom1@example.com', 3, 5),
+(104, '14567890', 'tm3211@example.com', 4, 1),
+(105, '34214567', 'mer121@example.com', 5, 1),
+(106, '43456890', '32strsfa1@example.com', 6, 1),
+(107, '22347890', '1ctom1wqw@example.com', 7, 2),
+(108, '44567890', '21ctm1sa@example.com', 8, 3),
+(109, '38874567', 'eqwctomerdwag1@example.com', 9, 6),
+(110, '23450090', 'vrscstr1dwa@example.com', 10, 6),
+(111, '32145890', 'e3q2o231m1@example.com', 11, 8),
+(112, '31267890', '31um144@example.com', 12, 10),
+(113, '34123567', 'gtrustomer31241@example.com', 13, 22),
+(114, '24532890', 'htjustr1fesxf@example.com', 14, 23),
+(115, '13234790', 'njmutomrewg1@example.com', 15, 16),
+(116, '14568990', 'klhcutm1grwer@example.com', 16, 5),
+(117, '78734567', 'loicstomerqqe1@example.com', 17, 6),
+(118, '79456890', 'ipustr1ee3q@example.com', 18, 6),
+(119, '96347890', 'uyrstom879781@example.com', 19, 6),
+(120, '87567890', 'tuiftcutm1htf@example.com', 20, 7),
+(121, '30004567', 'fewecomefesdr1@example.com', 21, 7),
+(122, '83456890', 'e3qwcustrads1@example.com', 22, 3),
+(123, '72347890', 'ewqfctodasm1@example.com', 23, 8),
+(124, '89567890', 'rtwcutfersm1@edawdxample.com', 24, 16),
+(125, '34567000', 'fewjwcuomdwweer1@example.com', 25, 17);
 
 -- Data Insertion for the `Name-Customer` table
 INSERT INTO `Name-Customer` (`customerID`, `first-name-customer`, `last-name-customer`, `username-customerID`)
@@ -345,17 +432,17 @@ VALUES
 (12, NOW(), 'delivery', 12, 'canceled', 'TRACK134', 12),
 (13, NOW(), 'delivery', 13, 'shipped', 'TRACK135', 13),
 (14, NOW(), 'delivery', 14, 'pending', 'TRACK136', 14),
-(15, NOW(), 'pick up', 15, 'delivered', 'TRACK137', 15),
-(16, NOW(), 'delivery', 16, 'canceled', 'TRACK138', 16),
-(17, NOW(), 'delivery', 17, 'shipped', 'TRACK139', 17),
-(18, NOW(), 'delivery', 18, 'pending', 'TRACK140', 18),
-(19, NOW(), 'pick up', 19, 'delivered', 'TRACK141', 19),
-(20, NOW(), 'delivery', 20, 'canceled', 'TRACK142', 20),
-(21, NOW(), 'delivery', 21, 'shipped', 'TRACK143', 21),
-(22, NOW(), 'delivery', 22, 'pending', 'TRACK144', 22),
-(23, NOW(), 'pick up', 23, 'delivered', 'TRACK145', 23),
-(24, NOW(), 'delivery', 24, 'canceled', 'TRACK146', 24),
-(25, NOW(), 'delivery', 25, 'shipped', 'TRACK147', 25);
+(15, '2023-01-15 10:00:00', 'pick up', 15, 'delivered', 'TRACK137', 15),
+(16, '2023-01-20 12:30:00', 'delivery', 16, 'canceled', 'TRACK138', 16),
+(17, '2023-01-25 15:45:00', 'delivery', 17, 'shipped', 'TRACK139', 17),
+(18, '2023-02-10 09:15:00', 'delivery', 18, 'pending', 'TRACK140', 18),
+(19, '2023-02-18 16:50:00', 'pick up', 19, 'delivered', 'TRACK141', 19),
+(20, '2023-03-05 11:20:00', 'delivery', 20, 'canceled', 'TRACK142', 20),
+(21, '2023-03-22 14:35:00', 'delivery', 21, 'shipped', 'TRACK143', 21),
+(22, '2023-04-10 10:40:00', 'delivery', 22, 'pending', 'TRACK144', 22),
+(23, '2023-04-18 13:00:00', 'pick up', 23, 'delivered', 'TRACK145', 23),
+(24, '2023-05-02 09:50:00', 'delivery', 24, 'canceled', 'TRACK146', 24),
+(25, '2023-05-20 15:30:00', 'delivery', 25, 'shipped', 'TRACK147', 25);
 
 -- Insert data into Address-Costumer table
 INSERT INTO `Address-Costumer` (`address-costumer`, `state-address`, `city-address`, `postal-code`, `country-address`, `customerID`)
@@ -387,132 +474,133 @@ VALUES
 (25, 'State Y', 'City Y', '56789', 'malaysia', 25);
 
 -- Insert data into Rekomendasi table (no foreign key dependency)
-INSERT INTO `Rekomendasi` (`rekomendasiID`, `bookID`, `genre-book`, `title-book`, `authors-book`)
+INSERT INTO `Rekomendasi` (`rekomendasiID`, `bookID`, `title-book`, `authors-book`)
 VALUES 
-(1, 1, 'fantasy', 'Book Title 1', 'Author 1'),
-(2, 2, 'horor', 'Book Title 2', 'Author 2'),
-(3, 3, 'history', 'Book Title 3', 'Author 3'),
-(4, 4, 'technology', 'Book Title 4', 'Author 4'),
-(5, 5, 'biology', 'Book Title 5', 'Author 5'),
-(6, 6, 'animal', 'Book Title 6', 'Author 6'),
-(7, 7, 'fantasy', 'Book Title 7', 'Author 7'),
-(8, 8, 'horor', 'Book Title 8', 'Author 8'),
-(9, 9, 'history', 'Book Title 9', 'Author 9'),
-(10, 10, 'technology', 'Book Title 10', 'Author 10'),
-(11, 11, 'biology', 'Book Title 11', 'Author 11'),
-(12, 12, 'animal', 'Book Title 12', 'Author 12'),
-(13, 13, 'fantasy', 'Book Title 13', 'Author 13'),
-(14, 14, 'horor', 'Book Title 14', 'Author 14'),
-(15, 15, 'history', 'Book Title 15', 'Author 15'),
-(16, 16, 'technology', 'Book Title 16', 'Author 16'),
-(17, 17, 'biology', 'Book Title 17', 'Author 17'),
-(18, 18, 'animal', 'Book Title 18', 'Author 18'),
-(19, 19, 'fantasy', 'Book Title 19', 'Author 19'),
-(20, 20, 'horor', 'Book Title 20', 'Author 20'),
-(21, 21, 'history', 'Book Title 21', 'Author 21'),
-(22, 22, 'technology', 'Book Title 22', 'Author 22'),
-(23, 23, 'biology', 'Book Title 23', 'Author 23'),
-(24, 24, 'animal', 'Book Title 24', 'Author 24'),
-(25, 25, 'fantasy', 'Book Title 25', 'Author 25');
-
+(1, 1, 'The Magic Portal', 'Author 1'),
+(2, 2, 'Dark Shadows', 'Author 2'),
+(3, 3, 'Ancient Times', 'Author 3'),
+(4, 4, 'Digital Age', 'Author 4'),
+(5, 5, 'Biology Basics', 'Author 5'),
+(6, 6, 'Pet Care Guide', 'Author 6'),
+(7, 7, 'Dragon Quest', 'Author 7'),
+(8, 8, 'Ghost Stories', 'Author 8'),
+(9, 9, 'Medieval Times', 'Author 9'),
+(10, 10, 'Tech Revolution', 'Author 10'),
+(11, 11, 'Cell Structure', 'Author 11'),
+(12, 12, 'Wildlife Adventures', 'Author 12'),
+(13, 13, 'Enchanted Forest', 'Author 13'),
+(14, 14, 'Nightmare Alley', 'Author 14'),
+(15, 15, 'World War Chronicles', 'Author 15'),
+(16, 16, 'AI Future', 'Author 16'),
+(17, 17, 'Marine Life', 'Author 17'),
+(18, 18, 'Zoo Adventures', 'Author 18'),
+(19, 19, 'Mystic Realms', 'Author 19'),
+(20, 20, 'Haunted House', 'Author 20'),
+(21, 21, 'Renaissance Art', 'Author 21'),
+(22, 22, 'Quantum Computing', 'Author 22'),
+(23, 23, 'Genetics 101', 'Author 23'),
+(24, 24, 'Safari Guide', 'Author 24'),
+(25, 25, 'Magic Kingdom', 'Author 25');
 -- Insert data into Books table
 INSERT INTO `Books` (`bookID`, `title-book`, `authors-book`, `genre-book`, `stock-book`, `price`, `isbn`, `publisher`, `sinopsis-book`, `transaksiID`, `customerID`)
 VALUES 
-(1, 'Book Title 1', 'Author 1', 'fantasy', 10, 19.99, '1234567890', 'Publisher A', 'A thrilling adventure.', 1, 1),
-(2, 'Book Title 2', 'Author 2', 'horor', 20, 29.99, '2345678901', 'Publisher B', 'A chilling horror story.', 2, 2),
-(3, 'Book Title 3', 'Author 3', 'history', 30, 39.99, '3456789012', 'Publisher C', 'A historical account.', 3, 3),
-(4, 'Book Title 4', 'Author 4', 'technology', 40, 49.99, '4567890123', 'Publisher D', 'A tech-savvy book.', 4, 4),
-(5, 'Book Title 5', 'Author 5', 'biology', 50, 59.99, '5678901234', 'Publisher E', 'A book about biology.', 5, 5),
-(6, 'Book Title 6', 'Author 6', 'animal', 60, 69.99, '6789012345', 'Publisher F', 'A book about animals.', 6, 6),
-(7, 'Book Title 7', 'Author 7', 'fantasy', 70, 79.99, '7890123456', 'Publisher G', 'A fantasy book.', 7, 7),
-(8, 'Book Title 8', 'Author 8', 'horror', 80, 89.99, '8901234567', 'Publisher H', 'A horror book.', 8, 8),
-(9, 'Book Title 9', 'Author 9', 'history', 90, 99.99, '9012345678', 'Publisher I', 'A historical book.', 9, 9),
-(10, 'Book Title 10', 'Author 10', 'technology', 100, 109.99, '0123456789', 'Publisher J', 'A tech book.', 10, 10),
-(11, 'Book Title 11', 'Author 11', 'biology', 110, 119.99, '1234567890', 'Publisher K', 'A biology book.', 11, 11),
-(12, 'Book Title 12', 'Author 12', 'animal', 120, 129.99, '2345678901', 'Publisher L', 'An animal book.', 12, 12),
-(13, 'Book Title 13', 'Author 13', 'fantasy', 130, 139.99, '3456789012', 'Publisher M', 'A fantasy book.', 13, 13),
-(14, 'Book Title 14', 'Author 14', 'horror', 140, 149.99, '4567890123', 'Publisher N', 'A horror book.', 14, 14),
-(15, 'Book Title 15', 'Author 15', 'history', 150, 159.99, '5678901234', 'Publisher O', 'A historical book.', 15, 15),
-(16, 'Book Title 16', 'Author 16', 'technology', 160, 169.99, '6789012345', 'Publisher P', 'A tech book.', 16, 16),
-(17, 'Book Title 17', 'Author 17', 'biology', 170, 179.99, '7890123456', 'Publisher Q', 'A biology book.', 17, 17),
-(18, 'Book Title 18', 'Author 18', 'animal', 180, 189.99, '8901234567', 'Publisher R', 'An animal book.', 18, 18),
-(19, 'Book Title 19', 'Author 19', 'fantasy', 190, 199.99, '9012345678', 'Publisher S', 'A fantasy book.', 19, 19),
-(20, 'Book Title 20', 'Author 20', 'horror', 200, 209.99, '0123456789', 'Publisher T', 'A horror book.', 20, 20),
-(21, 'Book Title 21', 'Author 21', 'history', 210, 219.99, '1234567890', 'Publisher U', 'A historical book.', 21, 21),
-(22, 'Book Title 22', 'Author 22', 'technology', 220, 229.99, '2345678901', 'Publisher V', 'A tech book.', 22, 22),
-(23, 'Book Title 23', 'Author 23', 'biology', 230, 239.99, '3456789012', 'Publisher W', 'A biology book.', 23, 23),
-(24, 'Book Title 24', 'Author 24', 'animal', 240, 249.99, '4567890123', 'Publisher X', 'An animal book.', 24, 24),
-(25, 'Book Title 25', 'Author 25', 'fantasy', 250, 259.99, '5678901234', 'Publisher Y', 'A fantasy book.', 25, 25);
+(1, 'The Magic Portal', 'Author 1', 'fantasy', 30, 29.99 , '1234567890', 'Publisher A', 'A thrilling adventure.', 1, 1),
+(2, 'Dark Shadows', 'Author 2', 'horor', 30, 19.99 , '2345678901', 'Publisher B', 'A chilling tale.', 2, 2),
+(3, 'Ancient Times', 'Author 3', 'history', 30, 34.99 , '3456789012', 'Publisher C', 'A historical account.', 3, 3),
+(4, 'Digital Age', 'Author 4', 'technology', 30, 54.99 , '4567890123', 'Publisher D', 'A tech revolution.', 4, 4),
+(5, 'Biology Basics', 'Author 5', 'biology', 30, 45.99 , '5678901234', 'Publisher E', 'An introduction to biology.', 5, 5),
+(6, 'Pet Care Guide', 'Author 6', 'animal', 30, 27.99 , '6789012345', 'Publisher F', 'A guide to pet care.', 6, 6),
+(7, 'Dragon Quest', 'Author 7', 'fantasy', 30, 24.99 , '7890123456', 'Publisher G', 'A quest for dragons.', 7, 7),
+(8, 'Ghost Stories', 'Author 8', 'horor', 30, 22.99 , '8901234567', 'Publisher H', 'A collection of ghost stories.', 8, 8),
+(9, 'Medieval Times', 'Author 9', 'history', 30, 42.99 , '9012345678', 'Publisher I', 'A journey through history.', 9, 9),
+(10, 'Tech Revolution', 'Author 10', 'technology', 30, 59.99 , '0123456789', 'Publisher J', 'A revolution in technology.', 10, 10),
+(11, 'Cell Structure', 'Author 11', 'biology', 30, 44.99 , '1234567890', 'Publisher K', 'An exploration of cells.', 11, 11),
+(12, 'Wildlife Adventures', 'Author 12', 'animal', 30, 49.99 , '2345678901', 'Publisher L', 'Adventures in the wild.', 12, 12),
+(13, 'Enchanted Forest', 'Author 13', 'fantasy', 30, 28.99 , '3456789012', 'Publisher M', 'A magical forest.', 13, 13),
+(14, 'Nightmare Alley', 'Author 14', 'horor', 30, 25.99 , '4567890123', 'Publisher N', 'A terrifying alley.', 14, 14),
+(15, 'World War Chronicles', 'Author 15', 'history', 30, 39.99 , '5678901234', 'Publisher O', 'Chronicles of war.', 15, 15),
+(16, 'AI Future', 'Author 16', 'technology', 30, 69.99 , '6789012345', 'Publisher P', 'The future of AI.', 16, 16),
+(17, 'Marine Life', 'Author 17', 'biology', 30, 37.99 , '7890123456', 'Publisher Q', 'Life under the sea.', 17, 17),
+(18, 'Zoo Adventures', 'Author 18', 'animal', 30, 33.99 , '8901234567', 'Publisher R', 'Adventures at the zoo.', 18, 18),
+(19, 'Mystic Realms', 'Author 19', 'fantasy', 30, 31.99 , '9012345678', 'Publisher S', 'Realms of magic.', 19, 19),
+(20, 'Haunted House', 'Author 20', 'horor', 30, 29.99 , '0123456789', 'Publisher T', 'A haunted house.', 20, 20),
+(21, 'Renaissance Art', 'Author 21', 'history', 30, 46.99 , '1234567890', 'Publisher U', 'Art of the Renaissance.', 21, 21),
+(22, 'Quantum Computing', 'Author 22', 'technology', 30, 64.99 , '2345678901', 'Publisher V', 'The world of quantum.', 22, 22),
+(23, 'Genetics 101', 'Author 23', 'biology', 30, 39.99 , '3456789012', 'Publisher W', 'An introduction to genetics.', 23, 23),
+(24, 'Safari Guide', 'Author 24', 'animal', 30, 29.99 , '45678932198', 'Publisher X', 'A guide to safaris.', 24, 24),
+(25, 'Magic Kingdom', 'Author 25', 'fantasy', 30, 34.99 , '5678901234', 'Publisher Y', 'A kingdom of magic.', 25, 25);
 
 -- Insert data into Employe table
-INSERT INTO `Employe` (`employeID`, `name-employee`, `contact-employee`, `bookID`, `email-employee`, `role_employee`, `stock-UpdateID`)
+INSERT INTO `Employe` (`employeID`, `name-employee`, `contact-employee`, `bookID`, `email-employee`, `role_employee`, `stock_updateID`)
 VALUES 
-(1, 201, '987-654-3210', 1, 'employe1@example.com', 'admin', 1);
+(1, 201, '987-654-3210', 1, 'employe1@example.com', 'admin', 1),
+(2, 202, '876-543-2109', 2, 'employe1@example.com', 'logistik', 2),
+(3, 203, '765-432-1098', 3, 'employe1@example.com', 'administrasi', 3),
+(4, 204, '654-321-0987', 4, 'employe1@example.com', 'admin', 4),
+(5, 205, '543-210-9876', 5, 'employe1@example.com', 'logistik', 5);
 
--- Insert data into Stock Update table
-INSERT INTO `Stock Update` (`stock-UpdateID`, `bookID`, `stockDate`, `quantityStock`, `reasonStock`)
+-- Insert data into stock_update table
+INSERT INTO `mydb`.`stock_update` (`stock_updateID`, `bookID`, `stockDate`, `quantityStock`, `reasonStock`)
 VALUES 
-(1, 1, NOW(), 50, 'Initial Stock'),
-(2, 1, NOW(), 10, 'Stock Update');
+(1, 1, NOW(), 9, 'Initial Stock');
 
 -- Insert data into Sales Transaksi table
 INSERT INTO `Sales Transaksi` (`transaksiID`, `transaksiDate`, `totalAmount`, `payment-methode`, `orderID`, `employeID`)
 VALUES 
-(1, NOW(), 100.00, 'cash', 1, 1),
-(2, NOW(), 40.00, 'cash', 2, 1),
-(3, NOW(), 30.00, 'e-wallet', 3, 1),
-(4, NOW(), 20.00, 'e-wallet', 4, 1),
-(5, NOW(), 100.00, 'e-wallet', 5, 1),
-(6, NOW(), 80.00, 'transfer bank', 6, 1),
-(7, NOW(), 90.00, 'transfer bank', 7, 1),
-(8, NOW(), 20.00, 'cash', 8, 1),
-(9, NOW(), 100.00, 'cash', 9, 1),
-(10, NOW(), 40.00, 'transfer bank', 10, 1),
-(11, NOW(), 30.00, 'transfer bank', 11, 1),
-(12, NOW(), 20.00, 'virtual bank', 12, 1),
-(13, NOW(), 100.00, 'cash', 13, 1),
-(14, NOW(), 40.00, 'virtual bank', 14, 1),
-(15, '2023-01-15 10:00:00', 30.00, 'cash', 15, 1),
-(16, '2023-01-20 12:30:00', 20.00, 'e-wallet', 16, 1),
-(17, '2023-01-25 15:45:00', 100.00, 'cash', 17, 1),
-(18, '2023-02-10 09:15:00', 40.00, 'virtual bank', 18, 1),
-(19, '2023-02-18 16:50:00', 30.00, 'cash', 19, 1),
-(20, '2023-03-05 11:20:00', 20.00, 'virtual bank', 20, 1),
-(21, '2023-03-22 14:35:00', 100.00, 'cash', 21, 1),
-(22, '2023-04-10 10:40:00', 40.00, 'virtual bank', 22, 1),
-(23, '2023-04-18 13:00:00', 30.00, 'cash', 23, 1),
-(24, '2023-05-02 09:50:00', 20.00, 'virtual bank', 24, 1),
-(25, '2023-05-20 15:30:00', 100.00, 'cash', 25, 1);
+(1, NOW(), 29.99, 'cash', 1, 1),
+(2, NOW(), 19.99, 'transfer bank', 2, 1),
+(3, NOW(), 34.99, 'e-wallet', 3, 1),
+(4, NOW(), 54.99, 'virtual bank', 4, 2),
+(5, NOW(), 45.99, 'cash', 5, 3),
+(6, NOW(), 27.99, 'e-wallet', 6, 5),
+(7, NOW(), 24.99, 'transfer bank', 7, 5),
+(8, NOW(), 22.99, 'cash', 8, 2),
+(9, NOW(), 42.99, 'virtual bank', 9, 5),
+(10, NOW(), 59.99, 'e-wallet', 10, 2),
+(11, NOW(), 44.99, 'transfer bank', 11, 4),
+(12, NOW(), 49.99, 'cash', 12, 5),
+(13, NOW(), 28.99, 'virtual bank', 13, 4),
+(14, NOW(), 25.99, 'e-wallet', 14, 5),
+(15, '2023-01-15 10:00:00', 39.99, 'transfer bank', 15, 3),
+(16, '2023-01-20 12:30:00', 69.99, 'cash', 16, 1),
+(17, '2023-01-25 15:45:00', 37.99, 'virtual bank', 17, 1),
+(18, '2023-02-10 09:15:00', 33.99, 'e-wallet', 18, 1),
+(19, '2023-02-18 16:50:00', 31.99, 'transfer bank', 19, 1),
+(20, '2023-03-05 11:20:00', 29.99, 'cash', 20, 1),
+(21, '2023-03-22 14:35:00', 46.99, 'virtual bank', 21, 1),
+(22, '2023-04-10 10:40:00', 64.99, 'e-wallet', 22, 1),
+(23, '2023-04-18 13:00:00', 39.99, 'transfer bank', 23, 1),
+(24, '2023-05-02 09:50:00', 29.99, 'cash', 24, 1),
+(25, '2023-05-20 15:30:00', 34.99, 'virtual bank', 25, 1);
 
 -- Insert data into Order table
 INSERT INTO `Order` (`orderID`, `OrderDate`, `TotalOrderAmount`, `customerID`, `transaksiID`)
 VALUES 
-(1, NOW(), 100.00, 1, 1),
-(2, NOW(), 40.00, 2, 2),
-(3, NOW(), 30.00, 3, 3),
-(4, NOW(), 20.00, 4, 4),
-(5, NOW(), 100.00, 5, 5),
-(6, NOW(), 80.00, 6, 6),
-(7, NOW(), 90.00, 7, 7),
-(8, NOW(), 20.00, 8, 8),
-(9, NOW(), 100.00, 9, 9),
-(10, NOW(), 40.00, 10, 10),
-(11, NOW(), 30.00, 11, 11),
-(12, NOW(), 20.00, 12, 12),
-(13, NOW(), 100.00, 13, 13),
-(14, NOW(), 40.00, 14, 14),
-(15,'2023-01-15 10:00:00', 30.00, 15, 15),
-(16,'2023-01-20 12:30:00', 20.00, 16, 16),
-(17,'2023-01-25 15:45:00', 100.00, 17, 17),
-(18,'2023-02-10 09:15:00', 40.00, 18, 18),
-(19,'2023-02-18 16:50:00', 30.00, 19, 19),
-(20,'2023-03-05 11:20:00', 20.00, 20, 20),
-(21,'2023-03-22 14:35:00', 100.00, 21, 21),
-(22,'2023-04-10 10:40:00', 40.00, 22, 22),
-(23,'2023-04-18 13:00:00', 30.00, 23, 23),
-(24,'2023-05-02 09:50:00', 20.00, 24, 24),
-(25,'2023-05-20 15:30:00', 100.00, 25, 25);
-
+(1, NOW(), 29.99, 1, 1),
+(2, NOW(), 19.99, 2, 2),
+(3, NOW(), 34.99, 3, 3),
+(4, NOW(), 54.99, 4, 4),
+(5, NOW(), 45.99, 5, 5),
+(6, NOW(), 27.99, 6, 6),
+(7, NOW(), 24.99, 7, 7),
+(8, NOW(), 22.99, 8, 8),
+(9, NOW(), 42.99, 9, 9),
+(10, NOW(), 59.99, 10, 10),
+(11, NOW(), 44.99, 11, 11),
+(12, NOW(), 49.99, 12, 12),
+(13, NOW(), 28.99, 13, 13),
+(14, NOW(), 25.99, 14, 14),
+(15,'2023-01-15 10:00:00', 39.99, 15, 15),
+(16,'2023-01-20 12:30:00', 69.99, 16, 16),
+(17,'2023-01-25 15:45:00', 37.99, 17, 17),
+(18,'2023-02-10 09:15:00', 33.99, 18, 18),
+(19,'2023-02-18 16:50:00', 31.99, 19, 19),
+(20,'2023-03-05 11:20:00', 29.99, 20, 20),
+(21,'2023-03-22 14:35:00', 46.99, 21, 21),
+(22,'2023-04-10 10:40:00', 64.99, 22, 22),
+(23,'2023-04-18 13:00:00', 39.99, 23, 23),
+(24,'2023-05-02 09:50:00', 29.99, 24, 24),
+(25,'2023-05-20 15:30:00', 34.99, 25, 25);
 
 -- Insert data into Shipment-Address table
 INSERT INTO `Shipment-Address` (`shipment-addressID`, `shipment-address-city`, `shipment-address-country`, `shipment-address-state`, `shipment-address-postal-code`, `shipmentID`)
@@ -550,55 +638,23 @@ VALUES
 (2, 'Jane', 'Smith', 'janesmith', 2),
 (3, 'Alice', 'Johnson', 'alicejohnson', 3),
 (4, 'Bob', 'Brown', 'bobbrown', 4),
-(5, 'Charlie', 'Davis', 'charliedavis', 5),
-(6, 'David', 'Wilson', 'davidwilson', 6),
-(7, 'Eve', 'Moore', 'evemoore', 7),
-(8, 'Frank', 'Taylor', 'franktaylor', 8),
-(9, 'Grace', 'Anderson', 'graceanderson', 9),
-(10, 'Henry', 'Martinez', 'henrymartinez', 10),
-(11, 'Ivy', 'Hernandez', 'ivyhernandez', 11),
-(12, 'Jack', 'Young', 'jackyoung', 12),
-(13, 'Kelly', 'King', 'kellyking', 13),
-(14, 'Liam', 'Wright', 'liamwright', 14),
-(15, 'Mia', 'Lopez', 'mialopez', 15),
-(16, 'Noah', 'Hill', 'noahhill', 16),
-(17, 'Olivia', 'Scott', 'oliviascott', 17),
-(18, 'Peter', 'Green', 'petergreen', 18),
-(19, 'Quinn', 'Adams', 'quinnadams', 19),
-(20, 'Ryan', 'Baker', 'ryanbaker', 20),
-(21, 'Sara', 'Perez', 'saraperez', 21),
-(22, 'Tom', 'Evans', 'tomevans', 22),
-(23, 'Uma', 'Collins', 'umacollins', 23),
-(24, 'Vince', 'Reed', 'vincereed', 24),
-(25, 'Wendy', 'Morris', 'wendymorris', 25);
+(5, 'Charlie', 'Davis', 'charliedavis', 5);
 
--- Query 1: Total orders and total amount for each customer, ordered by total amount in descending order
-CREATE TABLE IF NOT EXISTS `mydb`.`customer_order` AS
+-- Query to show payment method preferences
+CREATE TABLE IF NOT EXISTS `mydb`.`payment_method_preferences` AS
 SELECT 
-    c.`customerID`,
-    CONCAT(nc.`first-name-customer`, ' ', nc.`last-name-customer`) AS `Customer Name`,
     st.`payment-methode` AS `Payment Method`,
-    COUNT(o.`orderID`) AS `Total Orders`,
-    SUM(o.`TotalOrderAmount`) AS `Total Order Amount`
-FROM `Customer` c
-INNER JOIN `Name-Customer` nc ON c.`customerID` = nc.`customerID`
-INNER JOIN `Order` o ON c.`customerID` = o.`customerID`
-INNER JOIN `Sales Transaksi` st ON o.`transaksiID` = st.`transaksiID`
-GROUP BY c.`customerID`, nc.`first-name-customer`, nc.`last-name-customer`, st.`payment-methode`
-ORDER BY `customerID` ASC;
-
--- Query 2: Book transactions with stock updates in the last 60 days
-CREATE TABLE IF NOT EXISTS `mydb`.`book_transaction` AS
-SELECT 
-    b.`bookID`,
-    b.`title-book`,
-    MAX(su.`stockDate`) AS `Last Stock Update`,
-    SUM(su.`quantityStock`) AS `Total Stock Added`
-FROM `Books` b
-INNER JOIN `Stock Update` su ON b.`bookID` = su.`bookID`
-WHERE su.`stockDate` >= NOW() - INTERVAL 60 DAY
-GROUP BY b.`bookID`
-ORDER BY `Last Stock Update` DESC;
+    ROUND(SUM(st.`totalAmount`), 2) as total_revenue,
+    ROUND(AVG(st.`totalAmount`), 2) as average_transaction_value
+FROM 
+    `Sales Transaksi` st
+INNER JOIN `Order` o ON st.`transaksiID` = o.`transaksiID`
+WHERE
+    o.`OrderDate` >= NOW() - INTERVAL 30 DAY
+GROUP BY 
+    st.`payment-methode`
+ORDER BY 
+    total_revenue DESC;
 
 -- Query 3: Total transactions and total amount managed by employees in a specific role
 CREATE TABLE IF NOT EXISTS `mydb`.`employee_transaction` AS
@@ -610,9 +666,9 @@ SELECT
 FROM `Employe` e
 INNER JOIN `Name-Employee` ne ON e.`employeID` = ne.`employeID`
 INNER JOIN `Sales Transaksi` st ON e.`employeID` = st.`employeID`
-WHERE e.`role_employee` = 'admin'
 GROUP BY e.`employeID`, ne.`first-name-employee`, ne.`last-name-customer`
 ORDER BY `Total Amount` DESC;
+
 
 -- Query 4: Total shipments for each city with a 'pending' status
 CREATE TABLE IF NOT EXISTS `mydb`.`shipment_transaction` AS
@@ -628,24 +684,16 @@ ORDER BY `Total Shipments` DESC;
 -- Query 5: Recommended books for a specific genre with stock > 0
 CREATE TABLE IF NOT EXISTS `mydb`.`rekomendasi_customer` AS
 SELECT 
-    r.`genre-book`,
+    b.`genre-book`,
     r.`title-book` AS `Recommended Book`,
     r.`authors-book`
 FROM `Rekomendasi` r
 INNER JOIN `Books` b ON r.`bookID` = b.`bookID`
-WHERE r.`genre-book` = 'fantasy' AND b.`stock-book` > 0
+WHERE b.`genre-book` = 'fantasy' AND b.`stock-book` > 0
 GROUP BY r.`title-book`, r.`authors-book`
 ORDER BY r.`title-book` ASC;
 
 -- tambahan 
-CREATE TABLE IF NOT EXISTS `mydb`.`sales_trend_last_week` (
-    `Tanggal` DATE NOT NULL,
-    `Total Transaksi` INT NOT NULL,
-    `Total Penjualan` DECIMAL(10,2) NOT NULL,
-    `Rata-rata Penjualan` DECIMAL(10,2) NOT NULL,
-    `Pertumbuhan (%)` DECIMAL(10,2) NULL,
-    PRIMARY KEY (`Tanggal`)
-);
 
 INSERT INTO `mydb`.`sales_trend_last_week` (`Tanggal`, `Total Transaksi`, `Total Penjualan`, `Rata-rata Penjualan`, `Pertumbuhan (%)`)
 SELECT 
@@ -668,6 +716,56 @@ GROUP BY
     DATE(st.transaksiDate)
 ORDER BY 
     DATE(st.transaksiDate) ASC;
+
+
+INSERT INTO `mydb`.`sales_trend_last_year` (`Bulan`, `Total Transaksi`, `Total Penjualan`, `Rata-rata Penjualan`, `Pertumbuhan (%)`)
+SELECT 
+    DATE_FORMAT(st.transaksiDate, '%Y-%m-01') AS `Bulan`,
+    COUNT(st.transaksiID) AS `Total Transaksi`,
+    SUM(st.totalAmount) AS `Total Penjualan`,
+    ROUND(AVG(st.totalAmount), 2) AS `Rata-rata Penjualan`,
+    ROUND(
+        (SUM(st.totalAmount) - 
+        LAG(SUM(st.totalAmount)) OVER (ORDER BY DATE_FORMAT(st.transaksiDate, '%Y-%m-01'))) / 
+        LAG(SUM(st.totalAmount)) OVER (ORDER BY DATE_FORMAT(st.transaksiDate, '%Y-%m-01')) * 100, 
+        2
+    ) AS `Pertumbuhan (%)`
+FROM
+    `Sales Transaksi` st
+WHERE 
+    st.transaksiDate >= '2022-01-01 00:00:00' -- Data mulai dari tahun 2022
+    OR st.transaksiDate >= NOW() - INTERVAL 1 YEAR -- Data tahun terakhir
+GROUP BY
+    DATE_FORMAT(st.transaksiDate, '%Y-%m-01')
+ORDER BY
+    DATE_FORMAT(st.transaksiDate, '%Y-%m-01') ASC;
+    
+-- Create table for shipment details
+CREATE TABLE IF NOT EXISTS `mydb`.`shipment_details` AS
+SELECT 
+    s.`shipmentID`,
+    s.`shipment-date` AS `Shipment Date`,
+    s.`delivery-method` AS `Delivery Method`,
+    sa.`shipment-address-city` AS `City`,
+    sa.`shipment-address-country` AS `Country`,
+    sa.`shipment-address-state` AS `State`,
+    sa.`shipment-address-postal-code` AS `Postal Code`,
+    s.`status-shipment` AS `Status`,
+    s.`trackingNumber-shipment` AS `Tracking Number`,
+    o.`orderID`,
+    o.`OrderDate`,
+    c.`customerID`,
+    CONCAT(nc.`first-name-customer`, ' ', nc.`last-name-customer`) AS `Customer Name`,
+    st.`transaksiID`,
+    st.`payment-methode` AS `Payment Method`
+FROM
+    `Shipment` s
+INNER JOIN `Shipment-Address` sa ON s.`shipmentID` = sa.`shipmentID`
+INNER JOIN `Order` o ON s.`orderID` = o.`orderID`
+INNER JOIN `Customer` c ON o.`customerID` = c.`customerID`
+INNER JOIN `Name-Customer` nc ON c.`customerID` = nc.`customerID`
+INNER JOIN `Sales Transaksi` st ON o.`transaksiID` = st.`transaksiID`;
+
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
