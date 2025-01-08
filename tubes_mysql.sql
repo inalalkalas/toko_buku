@@ -418,7 +418,31 @@ VALUES
 -- Insert data into Books table
 INSERT INTO `Books` (`bookID`, `title-book`, `authors-book`, `genre-book`, `stock-book`, `price`, `isbn`, `publisher`, `sinopsis-book`, `transaksiID`, `customerID`)
 VALUES 
-(1, 'Book Title 1', 'Author 1', 'fantasy', 10, 19.99, '1234567890', 'Publisher A', 'A thrilling adventure.', 1, 1);
+(1, 'Book Title 1', 'Author 1', 'fantasy', 10, 19.99, '1234567890', 'Publisher A', 'A thrilling adventure.', 1, 1),
+(2, 'Book Title 2', 'Author 2', 'horor', 20, 29.99, '2345678901', 'Publisher B', 'A chilling horror story.', 2, 2),
+(3, 'Book Title 3', 'Author 3', 'history', 30, 39.99, '3456789012', 'Publisher C', 'A historical account.', 3, 3),
+(4, 'Book Title 4', 'Author 4', 'technology', 40, 49.99, '4567890123', 'Publisher D', 'A tech-savvy book.', 4, 4),
+(5, 'Book Title 5', 'Author 5', 'biology', 50, 59.99, '5678901234', 'Publisher E', 'A book about biology.', 5, 5),
+(6, 'Book Title 6', 'Author 6', 'animal', 60, 69.99, '6789012345', 'Publisher F', 'A book about animals.', 6, 6),
+(7, 'Book Title 7', 'Author 7', 'fantasy', 70, 79.99, '7890123456', 'Publisher G', 'A fantasy book.', 7, 7),
+(8, 'Book Title 8', 'Author 8', 'horror', 80, 89.99, '8901234567', 'Publisher H', 'A horror book.', 8, 8),
+(9, 'Book Title 9', 'Author 9', 'history', 90, 99.99, '9012345678', 'Publisher I', 'A historical book.', 9, 9),
+(10, 'Book Title 10', 'Author 10', 'technology', 100, 109.99, '0123456789', 'Publisher J', 'A tech book.', 10, 10),
+(11, 'Book Title 11', 'Author 11', 'biology', 110, 119.99, '1234567890', 'Publisher K', 'A biology book.', 11, 11),
+(12, 'Book Title 12', 'Author 12', 'animal', 120, 129.99, '2345678901', 'Publisher L', 'An animal book.', 12, 12),
+(13, 'Book Title 13', 'Author 13', 'fantasy', 130, 139.99, '3456789012', 'Publisher M', 'A fantasy book.', 13, 13),
+(14, 'Book Title 14', 'Author 14', 'horror', 140, 149.99, '4567890123', 'Publisher N', 'A horror book.', 14, 14),
+(15, 'Book Title 15', 'Author 15', 'history', 150, 159.99, '5678901234', 'Publisher O', 'A historical book.', 15, 15),
+(16, 'Book Title 16', 'Author 16', 'technology', 160, 169.99, '6789012345', 'Publisher P', 'A tech book.', 16, 16),
+(17, 'Book Title 17', 'Author 17', 'biology', 170, 179.99, '7890123456', 'Publisher Q', 'A biology book.', 17, 17),
+(18, 'Book Title 18', 'Author 18', 'animal', 180, 189.99, '8901234567', 'Publisher R', 'An animal book.', 18, 18),
+(19, 'Book Title 19', 'Author 19', 'fantasy', 190, 199.99, '9012345678', 'Publisher S', 'A fantasy book.', 19, 19),
+(20, 'Book Title 20', 'Author 20', 'horror', 200, 209.99, '0123456789', 'Publisher T', 'A horror book.', 20, 20),
+(21, 'Book Title 21', 'Author 21', 'history', 210, 219.99, '1234567890', 'Publisher U', 'A historical book.', 21, 21),
+(22, 'Book Title 22', 'Author 22', 'technology', 220, 229.99, '2345678901', 'Publisher V', 'A tech book.', 22, 22),
+(23, 'Book Title 23', 'Author 23', 'biology', 230, 239.99, '3456789012', 'Publisher W', 'A biology book.', 23, 23),
+(24, 'Book Title 24', 'Author 24', 'animal', 240, 249.99, '4567890123', 'Publisher X', 'An animal book.', 24, 24),
+(25, 'Book Title 25', 'Author 25', 'fantasy', 250, 259.99, '5678901234', 'Publisher Y', 'A fantasy book.', 25, 25);
 
 -- Insert data into Employe table
 INSERT INTO `Employe` (`employeID`, `name-employee`, `contact-employee`, `bookID`, `email-employee`, `role_employee`, `stock-UpdateID`)
