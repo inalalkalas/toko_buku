@@ -331,18 +331,89 @@ VALUES
 -- Data Insertion for the `Shipment` table
 INSERT INTO `Shipment` (`shipmentID`, `shipment-date`, `delivery-method`, `shipment-addressID`, `status-shipment`, `trackingNumber-shipment`, `orderID`)
 VALUES 
-(1, NOW(), 'delivery', 1, 'shipped', 'TRACK123', 1);
-
+(1, NOW(), 'delivery', 1, 'shipped', 'TRACK123', 1),
+(2, NOW(), 'delivery', 2, 'pending', 'TRACK124', 2),
+(3, NOW(), 'pick up', 3, 'delivered', 'TRACK125', 3),
+(4, NOW(), 'delivery', 4, 'canceled', 'TRACK126', 4),
+(5, NOW(), 'delivery', 5, 'shipped', 'TRACK127', 5),
+(6, NOW(), 'delivery', 6, 'pending', 'TRACK128', 6),
+(7, NOW(), 'pick up', 7, 'delivered', 'TRACK129', 7),
+(8, NOW(), 'delivery', 8, 'canceled', 'TRACK130', 8),
+(9, NOW(), 'delivery', 9, 'shipped', 'TRACK131', 9),
+(10, NOW(), 'delivery', 10, 'pending', 'TRACK132', 10),
+(11, NOW(), 'pick up', 11, 'delivered', 'TRACK133', 11),
+(12, NOW(), 'delivery', 12, 'canceled', 'TRACK134', 12),
+(13, NOW(), 'delivery', 13, 'shipped', 'TRACK135', 13),
+(14, NOW(), 'delivery', 14, 'pending', 'TRACK136', 14),
+(15, NOW(), 'pick up', 15, 'delivered', 'TRACK137', 15),
+(16, NOW(), 'delivery', 16, 'canceled', 'TRACK138', 16),
+(17, NOW(), 'delivery', 17, 'shipped', 'TRACK139', 17),
+(18, NOW(), 'delivery', 18, 'pending', 'TRACK140', 18),
+(19, NOW(), 'pick up', 19, 'delivered', 'TRACK141', 19),
+(20, NOW(), 'delivery', 20, 'canceled', 'TRACK142', 20),
+(21, NOW(), 'delivery', 21, 'shipped', 'TRACK143', 21),
+(22, NOW(), 'delivery', 22, 'pending', 'TRACK144', 22),
+(23, NOW(), 'pick up', 23, 'delivered', 'TRACK145', 23),
+(24, NOW(), 'delivery', 24, 'canceled', 'TRACK146', 24),
+(25, NOW(), 'delivery', 25, 'shipped', 'TRACK147', 25);
 
 -- Insert data into Address-Costumer table
 INSERT INTO `Address-Costumer` (`address-costumer`, `state-address`, `city-address`, `postal-code`, `country-address`, `customerID`)
 VALUES 
-(1, 'State A', 'City A', '12345', 'indonesia', 1);
+(1, 'State A', 'City A', '12345', 'indonesia', 1),
+(2, 'State B', 'City B', '23456', 'japan', 2),
+(3, 'State C', 'City C', '34567', 'singapore', 3),
+(4, 'State D', 'City D', '45678', 'malaysia', 4),
+(5, 'State E', 'City E', '56789', 'china', 5),
+(6, 'State F', 'City F', '67890', 'philipine', 6),
+(7, 'State G', 'City G', '78901', 'australia', 7),
+(8, 'State H', 'City H', '89012', 'indonesia', 8),
+(9, 'State I', 'City I', '90123', 'japan', 9),
+(10, 'State J', 'City J', '01234', 'singapore', 10),
+(11, 'State K', 'City K', '12345', 'malaysia', 11),
+(12, 'State L', 'City L', '23456', 'china', 12),
+(13, 'State M', 'City M', '34567', 'philipine', 13),
+(14, 'State N', 'City N', '45678', 'australia', 14),
+(15, 'State O', 'City O', '56789', 'indonesia', 15),
+(16, 'State P', 'City P', '67890', 'japan', 16),
+(17, 'State Q', 'City Q', '78901', 'singapore', 17),
+(18, 'State R', 'City R', '89012', 'malaysia', 18),
+(19, 'State S', 'City S', '90123', 'china', 19),
+(20, 'State T', 'City T', '01234', 'philipine', 20),
+(21, 'State U', 'City U', '12345', 'australia', 21),
+(22, 'State V', 'City V', '23456', 'indonesia', 22),
+(23, 'State W', 'City W', '34567', 'japan', 23),
+(24, 'State X', 'City X', '45678', 'singapore', 24),
+(25, 'State Y', 'City Y', '56789', 'malaysia', 25);
 
 -- Insert data into Rekomendasi table (no foreign key dependency)
 INSERT INTO `Rekomendasi` (`rekomendasiID`, `bookID`, `genre-book`, `title-book`, `authors-book`)
 VALUES 
-(1, 1, 'fantasy', 'Book Title 1', 'Author 1');
+(1, 1, 'fantasy', 'Book Title 1', 'Author 1'),
+(2, 2, 'horor', 'Book Title 2', 'Author 2'),
+(3, 3, 'history', 'Book Title 3', 'Author 3'),
+(4, 4, 'technology', 'Book Title 4', 'Author 4'),
+(5, 5, 'biology', 'Book Title 5', 'Author 5'),
+(6, 6, 'animal', 'Book Title 6', 'Author 6'),
+(7, 7, 'fantasy', 'Book Title 7', 'Author 7'),
+(8, 8, 'horor', 'Book Title 8', 'Author 8'),
+(9, 9, 'history', 'Book Title 9', 'Author 9'),
+(10, 10, 'technology', 'Book Title 10', 'Author 10'),
+(11, 11, 'biology', 'Book Title 11', 'Author 11'),
+(12, 12, 'animal', 'Book Title 12', 'Author 12'),
+(13, 13, 'fantasy', 'Book Title 13', 'Author 13'),
+(14, 14, 'horor', 'Book Title 14', 'Author 14'),
+(15, 15, 'history', 'Book Title 15', 'Author 15'),
+(16, 16, 'technology', 'Book Title 16', 'Author 16'),
+(17, 17, 'biology', 'Book Title 17', 'Author 17'),
+(18, 18, 'animal', 'Book Title 18', 'Author 18'),
+(19, 19, 'fantasy', 'Book Title 19', 'Author 19'),
+(20, 20, 'horor', 'Book Title 20', 'Author 20'),
+(21, 21, 'history', 'Book Title 21', 'Author 21'),
+(22, 22, 'technology', 'Book Title 22', 'Author 22'),
+(23, 23, 'biology', 'Book Title 23', 'Author 23'),
+(24, 24, 'animal', 'Book Title 24', 'Author 24'),
+(25, 25, 'fantasy', 'Book Title 25', 'Author 25');
 
 -- Insert data into Books table
 INSERT INTO `Books` (`bookID`, `title-book`, `authors-book`, `genre-book`, `stock-book`, `price`, `isbn`, `publisher`, `sinopsis-book`, `transaksiID`, `customerID`)
@@ -357,7 +428,8 @@ VALUES
 -- Insert data into Stock Update table
 INSERT INTO `Stock Update` (`stock-UpdateID`, `bookID`, `stockDate`, `quantityStock`, `reasonStock`)
 VALUES 
-(1, 1, NOW(), 50, 'Initial Stock');
+(1, 1, NOW(), 50, 'Initial Stock'),
+(2, 1, NOW(), 10, 'Stock Update');
 
 -- Insert data into Sales Transaksi table
 INSERT INTO `Sales Transaksi` (`transaksiID`, `transaksiDate`, `totalAmount`, `payment-methode`, `orderID`, `employeID`)
@@ -421,7 +493,31 @@ VALUES
 -- Insert data into Shipment-Address table
 INSERT INTO `Shipment-Address` (`shipment-addressID`, `shipment-address-city`, `shipment-address-country`, `shipment-address-state`, `shipment-address-postal-code`, `shipmentID`)
 VALUES 
-(1, 'City A', 'indonesia', 'State A', '12345', 1);
+(1, 'City A', 'indonesia', 'State A', '12345', 1),
+(2, 'City B', 'japan', 'State B', '23456', 2),
+(3, 'City C', 'singapore', 'State C', '34567', 3),
+(4, 'City D', 'malaysia', 'State D', '45678', 4),
+(5, 'City E', 'china', 'State E', '56789', 5),
+(6, 'City F', 'philipine', 'State F', '67890', 6),
+(7, 'City G', 'australia', 'State G', '78901', 7),
+(8, 'City H', 'indonesia', 'State H', '89012', 8),
+(9, 'City I', 'japan', 'State I', '90123', 9),
+(10, 'City J', 'singapore', 'State J', '01234', 10),
+(11, 'City K', 'malaysia', 'State K', '12345', 11),
+(12, 'City L', 'china', 'State L', '23456', 12),
+(13, 'City M', 'philipine', 'State M', '34567', 13),
+(14, 'City N', 'australia', 'State N', '45678', 14),
+(15, 'City O', 'indonesia', 'State O', '56789', 15),
+(16, 'City P', 'japan', 'State P', '67890', 16),
+(17, 'City Q', 'singapore', 'State Q', '78901', 17),
+(18, 'City R', 'malaysia', 'State R', '89012', 18),
+(19, 'City S', 'china', 'State S', '90123', 19),
+(20, 'City T', 'philipine', 'State T', '01234', 20),
+(21, 'City U', 'australia', 'State U', '12345', 21),
+(22, 'City V', 'indonesia', 'State V', '23456', 22),
+(23, 'City W', 'japan', 'State W', '34567', 23),
+(24, 'City X', 'singapore', 'State X', '45678', 24),
+(25, 'City Y', 'malaysia', 'State Y', '56789', 25);
 
 -- Insert data into Name-Employee table
 INSERT INTO `Name-Employee` (`name-employeeID`, `first-name-employee`, `last-name-customer`, `username-employee`, `employeID`)
