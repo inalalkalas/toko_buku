@@ -522,7 +522,31 @@ VALUES
 -- Insert data into Name-Employee table
 INSERT INTO `Name-Employee` (`name-employeeID`, `first-name-employee`, `last-name-customer`, `username-employee`, `employeID`)
 VALUES 
-(1, 'John', 'Doe', 'johndoe', 1);
+(1, 'John', 'Doe', 'johndoe', 1),
+(2, 'Jane', 'Smith', 'janesmith', 2),
+(3, 'Alice', 'Johnson', 'alicejohnson', 3),
+(4, 'Bob', 'Brown', 'bobbrown', 4),
+(5, 'Charlie', 'Davis', 'charliedavis', 5),
+(6, 'David', 'Wilson', 'davidwilson', 6),
+(7, 'Eve', 'Moore', 'evemoore', 7),
+(8, 'Frank', 'Taylor', 'franktaylor', 8),
+(9, 'Grace', 'Anderson', 'graceanderson', 9),
+(10, 'Henry', 'Martinez', 'henrymartinez', 10),
+(11, 'Ivy', 'Hernandez', 'ivyhernandez', 11),
+(12, 'Jack', 'Young', 'jackyoung', 12),
+(13, 'Kelly', 'King', 'kellyking', 13),
+(14, 'Liam', 'Wright', 'liamwright', 14),
+(15, 'Mia', 'Lopez', 'mialopez', 15),
+(16, 'Noah', 'Hill', 'noahhill', 16),
+(17, 'Olivia', 'Scott', 'oliviascott', 17),
+(18, 'Peter', 'Green', 'petergreen', 18),
+(19, 'Quinn', 'Adams', 'quinnadams', 19),
+(20, 'Ryan', 'Baker', 'ryanbaker', 20),
+(21, 'Sara', 'Perez', 'saraperez', 21),
+(22, 'Tom', 'Evans', 'tomevans', 22),
+(23, 'Uma', 'Collins', 'umacollins', 23),
+(24, 'Vince', 'Reed', 'vincereed', 24),
+(25, 'Wendy', 'Morris', 'wendymorris', 25);
 
 -- Query 1: Total orders and total amount for each customer, ordered by total amount in descending order
 CREATE TABLE IF NOT EXISTS `mydb`.`customer_order` AS
