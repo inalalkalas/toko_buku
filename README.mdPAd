@@ -1,0 +1,6 @@
+Untuk FIle DB_statitic.sql bisa dijalankan melalui XAMPP ataupun Terminal
+
+dan unutk file tubes_mysql.sql dijalankan melalui terminal SQL/Terminal
+unutk Menjalankan program tersebut harus login mysql terlebih dahulu 
+"mysql -u root -p"
+"source /directory file/nama_file sql (tubes_mysql.sql)
