@@ -981,3 +981,20 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+CREATE TABLE IF NOT EXISTS mydb.genre_statistics AS 
+SELECT 
+    b.genre_book, 
+    COUNT(b.bookID) AS Total_Books, 
+    SUM(b.stock_book) AS Total_Stock, 
+    CASE 
+        WHEN SUM(st.totalAmount) IS NULL THEN 'Tidak Ada Penjualan' 
+        ELSE SUM(st.totalAmount) 
+    END AS Total_Sales 
+FROM 
+    mydb.Books b 
+LEFT JOIN 
+    mydb.sales_transaksi st ON b.transaksiID = st.transaksiID 
+GROUP BY 
+    b.genre_book 
+ORDER BY 
+    Total_Sales DESC;
