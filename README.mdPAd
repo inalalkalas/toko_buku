@@ -4,3 +4,5 @@ dan unutk file tubes_mysql.sql dijalankan melalui terminal SQL/Terminal
 unutk Menjalankan program tersebut harus login mysql terlebih dahulu 
 "mysql -u root -p"
 "source /directory file/nama_file sql (tubes_mysql.sql)"
+
+terdapat 2 kode karena file tubes_mysql.sql tidak bisa dijalankan di XAMPP
